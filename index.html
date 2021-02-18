@@ -1,29 +1,118 @@
-<html>
+html>
 
-  <head>
-	<meta charset="utf-8">
-	<title>Soundboard</title>
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-  </head>
+	<head>
+		<meta charset="utf-8">
+		<title>Soundboard</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<style media="screen">
+			button { width: 99px; height: 99px; }
+			button.btn-space{ width: 400px;	}
+			.row{ justify-content: center; }
+	
+		</style>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	</head>
+	
 
-  <style media="screen">
-      button{
-          width: 99px;
-          height: 99px;
-      }
-      button.btn-space{
-          width: 400px;
-      }
-      .row{
-          justify-content: center;
-      }
-  </style>
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-  <body>
-
+	<body>
+	  
 	<div class="container" id="container">
+	</div> <!-- /container -->		
+	  <script>
+		//----
+		// Keyboard Layout
+		//----
+		var kbrd = `#   1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 | - | = | BACKSPACE 
+			   		#    Q | W | E | R | T | Y | U | I | O | P | [ | ] | \
+					#      A | S | D | F | G | H | J | K | L | : | " | ENTER
+					# SHIFT | Z | X | C | V | B | N | Z | N | M | < | > | ? 
+                    # CTRL | META | ALT | S P A C E   B A R | ALT | SCRL | CTRL`
+		
+		//-----
+		// Map Keys to Souds 
+		//-----
+		var soundMap = {
+		    A: { name: "Angels",    sound: "angels-singing" },
+		    C: { name: "Clap",      sound: "claps" },
+		    D: { name: "Drama",     sound: "drama" },
+		    I: { name: "Imperial",  sound: "imperial_march" },
+		    F: { name: "Fail",      sound: "fail-sound" },
+		    M: { name: "Fabulous",  sound: "fabulous" },
+		    T: { name: "Tiger",     sound: "eye-of-the-tiger" },
+		    ,: { name: "Inception", sound: "inception" },
+		    S: { name: "Celebrate", sound: "celebration" },
+		    L: { name: "Love",      sound: "marvin" },
+		    K: { name: "Darkness",  sound: "hellodarkness" },
+		    J: { name: "Sad",       sound: "mortysad" },
+		    1: { name: "Secret",    sound: "astley" },
+		    O: { name: "OMG",       sound: "omg" },
+		    Z: { name: "Crickets",  sound: "crickets" },
+		    H: { name: "HaHa",      sound: "haha" },
+		    N: { name: "Turn Down", sound: "turn-down" },
+		    E: { name: "John Cena", sound: "cena" },
+		    B: { name: "Batman",    sound: "batman" },
+		    G: { name: "Muahaha",   sound: "muahaha" },
+		    W: { name: "Wrong",     sound: "wrong" },
+		    2: { name: "My Man", 	sound: "my-man" },
+		}
+		
+		//-----
+		// Create the keyboard and audio elements on the screen
+		//-----
+		let buttonList = {};
+		let audioList = {};
+	  	let container = document.getElementById('container');
+		  
+		 // For each Keyboard Row...
+		kbrd.split("#").forEach((row)=>{
+			
+			// Create a row element
+			let divRow = document.createElement('div');
+			dirRow.clasName = "row";
+			
+			// For each key in that row...
+			row.split("|").forEach((key)=>{
+				
+				// Look for an entry for that key in the sound map
+				key = key.trim();
+				let name = soundMap[key].name || "&nbsp;";
+				let file = soundMap[key].sound || false;
+				
+				// Create a keyboard button, and show the sound name if on was found
+				let btn = document.createElement('button');
+				btn.type = "button"
+				btn.className = "btn btn-primary";
+				btn.innerHTML = `<b>${key}</b><br>${name}</button>&nbsp;`;
+				dirRow.appendChild(btn); 
+				buttonList[key] = btn;
+				
+				// If there is a sound map...
+				if (file){
+					
+					// Create an audio element too
+					let audio = document.createElement('audio');
+					audio.src = `tunes/${file}.mp3`;
+					audio.id = `sound_${key}`;
+					document.AppendChild(audio); 
+					audioList[key] = auido;
+					
+					// And Connect the keyboard button to it
+					btn.addEventHandler('press', function(){
+						StopAllAudio();
+						auido.play();
+					});
+					
+					// And Connect the audio to the keybaord for feedback
+					audio.addEventHandler('playing', function(){ btn.classList.add('playing');    });
+					audio.addEventHandler('paused', function(){  btn.classList.remove('playing'); });
+				}
+			});
+		});
+			
+
+	  </script>
+    
+	
         <div class="row">&nbsp;</div>
         <div class="row">
             <button type="button" onclick="onPress('1')" class="btn btn-primary"><b>1</b><br>Secret</button>&nbsp;
@@ -78,7 +167,7 @@
         <div class="row">
             <button type="button" onclick="onPress(' ')" class="btn btn-primary btn-space">SPACE</b><br>(Stop)</button>
         </div>
-	</div> <!-- /container -->
+	
 
     <audio id="soundA" src="tunes/angels-singing.mp3"></audio>
     <audio id="soundC" src="tunes/claps.mp3"></audio>
